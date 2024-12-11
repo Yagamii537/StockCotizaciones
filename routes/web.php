@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ClienteController;
+
 
 // Redirige la raíz al login si no se ha iniciado sesión
 Route::get('/', function () {
@@ -22,4 +24,5 @@ Route::middleware([
 
     Route::resource('inventarios', InventarioController::class)->names('inventarios');
     Route::resource('categorias', CategoriaController::class)->names('categorias');
+    Route::resource('clientes', ClienteController::class)->names('clientes');
 });

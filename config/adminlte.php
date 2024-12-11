@@ -320,7 +320,12 @@ return [
         [
             'text' => 'Categorias',
             'route' => 'categorias.index',
-            'icon' => 'fas fa-fw fa-lock',
+            'icon' => 'fas fa-tags',
+        ],
+        [
+            'text' => 'Clientes',
+            'route' => 'clientes.index',
+            'icon' => 'fas fa-users',
         ],
         [
             'text' => 'multilevel',
