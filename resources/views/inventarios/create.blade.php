@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <form action="{{ route('inventario.store') }}" method="POST">
+    <form action="{{ route('inventarios.store') }}" method="POST">
         @csrf
 
         <div class="form-group">

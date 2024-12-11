@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\CategoriaController;
 
 // Redirige la raíz al login si no se ha iniciado sesión
 Route::get('/', function () {
@@ -18,7 +19,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
-    Route::get('/inventario/create', [InventarioController::class, 'create'])->name('inventario.create');
-    Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
+
+    Route::resource('inventarios', InventarioController::class)->names('inventarios');
+    Route::resource('categorias', CategoriaController::class)->names('categorias');
 });
