@@ -20,19 +20,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($cotizaciones as $cotizacion)
+            @foreach ($cotizaciones as $cotizacione)
                 <tr>
-                    <td>{{ $cotizacion->id }}</td>
-                    <td>{{ $cotizacion->cliente->nombres }} {{ $cotizacion->cliente->apellidos }}</td>
-                    <td>{{ $cotizacion->fecha }}</td>
-                    <td>${{ number_format($cotizacion->total, 2) }}</td>
+                    <td>{{ $cotizacione->id }}</td>
+                    <td>{{ $cotizacione->cliente->nombres }} {{ $cotizacione->cliente->apellidos }}</td>
+                    <td>{{ $cotizacione->fecha }}</td>
+                    <td>${{ number_format($cotizacione->total, 2) }}</td>
                     <td>
-                        <a href="{{ route('cotizaciones.edit', $cotizacion) }}" class="btn btn-sm btn-warning">Editar</a>
-                        <form action="{{ route('cotizaciones.destroy', $cotizacion) }}" method="POST" style="display: inline-block;">
+                        <a href="{{ route('cotizaciones.edit', $cotizacione) }}" class="btn btn-sm btn-success">Editar</a>
+                        <form action="{{ route('cotizaciones.destroy', $cotizacione) }}" method="POST" style="display: inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                         </form>
+                        <a href="{{ route('cotizaciones.pdf', $cotizacione->id) }}" class="btn btn-primary btn-sm">PDF</a>
                     </td>
                 </tr>
             @endforeach

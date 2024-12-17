@@ -15,18 +15,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::create([
-            'name' => 'Mauricio Peñafiel',
-            'email' => 'admin@correo.com',
-            'password' => bcrypt('123456789')
-        ]);
-
-
-
         $this->call([
+            RoleSeeder::class,
             CategoriaSeeder::class,
             ProductoSeeder::class,
             ClienteSeeder::class
         ]);
+
+        User::create([
+            'name' => 'Mauricio Peñafiel',
+            'email' => 'admin@correo.com',
+            'password' => bcrypt('123456789')
+        ])->assignRole('admin');;
     }
 }

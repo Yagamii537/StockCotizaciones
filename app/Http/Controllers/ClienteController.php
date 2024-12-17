@@ -13,6 +13,23 @@ class ClienteController extends Controller
         return view('clientes.index', compact('clientes'));
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Busca clientes que coincidan con el texto ingresado
+        $clientes = Cliente::where('cedula', 'like', "%$query%")
+            ->orWhere('nombres', 'like', "%$query%")
+            ->orWhere('apellidos', 'like', "%$query%")
+            ->limit(10)
+            ->get();
+
+        return response()->json($clientes);
+    }
+
+
+
+
     public function create()
     {
         return view('clientes.create');

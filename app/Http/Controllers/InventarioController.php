@@ -34,6 +34,36 @@ class InventarioController extends Controller
         return redirect()->route('inventarios.index')->with('success', 'Producto creado con éxito.');
     }
 
+    public function search(Request $request)
+    {
+        try {
+            $query = $request->input('query');
+
+            // Si no hay término de búsqueda, devolver una respuesta vacía
+            if (!$query) {
+                return response()->json([], 200);
+            }
+
+            // Buscar productos por nombre o descripción
+            $productos = Producto::where('nombre', 'like', "%$query%")
+                ->orWhere('descripcion', 'like', "%$query%")
+                ->limit(10)
+                ->get();
+
+            // Devuelve los productos encontrados en formato JSON
+            return response()->json($productos, 200);
+        } catch (\Exception $e) {
+            // Devuelve el mensaje de error si ocurre una excepción
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+
+
+
+
+
 
 
     public function show($id) {}

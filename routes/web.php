@@ -5,6 +5,10 @@ use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CotizacionController;
+use App\Http\Controllers\UserController;
+
+
+
 
 
 // Redirige la raíz al login si no se ha iniciado sesión
@@ -22,9 +26,14 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::resource('users', UserController::class)->names('users');
+    Route::resource('inventarios', InventarioController::class)->names('inventarios')->except('show');
+    Route::get('/inventarios/search', [InventarioController::class, 'search'])->name('inventarios.search');
+    Route::get('/cotizaciones/{id}/pdf', [CotizacionController::class, 'generatePDF'])->name('cotizaciones.pdf');
 
-    Route::resource('inventarios', InventarioController::class)->names('inventarios');
+
     Route::resource('categorias', CategoriaController::class)->names('categorias');
-    Route::resource('clientes', ClienteController::class)->names('clientes');
+    Route::resource('clientes', ClienteController::class)->names('clientes')->except('show');
     Route::resource('cotizaciones', CotizacionController::class)->names('cotizaciones');
+    Route::get('/clientes/search', [ClienteController::class, 'search'])->name('clientes.search');
 });

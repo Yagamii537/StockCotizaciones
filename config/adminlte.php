@@ -330,22 +330,23 @@ return [
         [
             'text' => 'Cotizaciones',
             'route' => 'cotizaciones.index',
-            'icon' => 'fas fa-users',
+            'icon' => 'fas fa-file-invoice',
         ],
-        ['header' => 'labels'],
+        ['header' => 'ADMINISTRACIÓN'],
         [
-            'text' => 'important',
-            'icon_color' => 'red',
+            'text' => 'Usuarios',
+
+            'icon' => 'fas fa-user',
+            'route' => 'users.index',
+        ],
+        [
+            'text' => 'Roles',
+            'icon' => 'fas fa-user-shield',
             'url' => '#',
         ],
         [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
+            'text' => 'Permisos',
+            'icon' => 'fas fa-key',
             'url' => '#',
         ],
     ],
