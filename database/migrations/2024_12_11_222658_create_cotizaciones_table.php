@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade'); // Relación con clientes
             $table->date('fecha'); // Fecha de la cotización
             $table->decimal('total', 10, 2)->default(0); // Total de la cotización
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -10,13 +10,16 @@ use Illuminate\Http\Request;
 use App\Models\DetalleCotizacion;
 
 
+
+
 class CotizacionController extends Controller
 {
     public function index()
     {
-        $cotizaciones = Cotizacion::with('cliente')->get();
+        $cotizaciones = Cotizacion::where('user_id', auth('web')->id())->get();
         return view('cotizaciones.index', compact('cotizaciones'));
     }
+
 
     public function create()
     {
@@ -27,41 +30,34 @@ class CotizacionController extends Controller
 
     public function store(Request $request)
     {
-        // Validar los datos
+        $a = auth('web')->id();
+
+
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
             'fecha' => 'required|date',
             'productos' => 'required|array',
-            'productos.*.cantidad' => 'required|integer|min:1',
-            'productos.*.precio' => 'required|numeric|min:0',
-            'productos.*.subtotal' => 'required|numeric|min:0',
         ]);
 
-        // Crear la cotización
         $cotizacion = Cotizacion::create([
+
             'cliente_id' => $request->cliente_id,
             'fecha' => $request->fecha,
-            'total' => array_sum(array_column($request->productos, 'subtotal')), // Calcular el total
+            'total' => array_sum(array_column($request->productos, 'subtotal')),
+            'user_id' => $a, // Asociar usuario logueado
         ]);
 
-        // Crear los detalles de la cotización
-        foreach ($request->productos as $productoId => $producto) {
-            DetalleCotizacion::create([
-                'cotizacion_id' => $cotizacion->id,
-                'producto_id' => $productoId, // Usar la clave del array como el ID del producto
+        foreach ($request->productos as $producto_id => $producto) {
+            $cotizacion->detalles()->create([
+                'producto_id' => $producto_id,
                 'cantidad' => $producto['cantidad'],
                 'precio_unitario' => $producto['precio'],
                 'subtotal' => $producto['subtotal'],
             ]);
         }
 
-        // Redirigir al índice con un mensaje de éxito
-        return redirect()->route('cotizaciones.index')->with('success', 'Cotización guardada con éxito.');
+        return redirect()->route('cotizaciones.index')->with('success', 'Cotización creada con éxito.');
     }
-
-
-
-
 
     public function edit(Cotizacion $cotizacione)
     {

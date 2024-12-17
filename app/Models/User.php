@@ -67,4 +67,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function cotizaciones()
+    {
+        return $this->hasMany(Cotizacion::class);
+    }
+
+    public function clientes()
+    {
+        return $this->hasMany(Cliente::class);
+    }
 }

@@ -9,7 +9,7 @@ class Cotizacion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['cliente_id', 'fecha', 'total'];
+    protected $fillable = ['user_id', 'cliente_id', 'fecha', 'total'];
 
     // Relación con cliente
     public function cliente()
@@ -21,5 +21,10 @@ class Cotizacion extends Model
     public function detalles()
     {
         return $this->hasMany(DetalleCotizacion::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

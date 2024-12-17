@@ -9,9 +9,11 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::all();
+        $userId = auth('web')->id();
+        $clientes = Cliente::where('user_id', auth('web')->id())->get();
         return view('clientes.index', compact('clientes'));
     }
+
 
     public function search(Request $request)
     {
@@ -37,6 +39,8 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
+        $idUauth = auth('web')->id();
+
         $request->validate([
             'cedula' => 'required|digits:10|unique:clientes,cedula',
             'nombres' => 'required|string|max:255',
@@ -46,10 +50,19 @@ class ClienteController extends Controller
             'email' => 'nullable|email|unique:clientes,email',
         ]);
 
-        Cliente::create($request->all());
+        Cliente::create([
+            'user_id' => $idUauth, // Asociar usuario logueado
+            'cedula' => $request->cedula,
+            'nombres' => $request->nombres,
+            'apellidos' => $request->apellidos,
+            'direccion' => $request->direccion,
+            'telefono' => $request->telefono,
+            'email' => $request->email,
+        ]);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente creado con éxito.');
     }
+
 
     public function edit(Cliente $cliente)
     {
@@ -58,6 +71,12 @@ class ClienteController extends Controller
 
     public function update(Request $request, Cliente $cliente)
     {
+        // Verificar si el usuario autenticado puede modificar este cliente
+        if ($cliente->user_id !== auth('web')->id()) {
+            return redirect()->route('clientes.index')->with('error', 'No tienes permiso para editar este cliente.');
+        }
+
+        // Validación de los datos
         $request->validate([
             'cedula' => 'required|digits:10|unique:clientes,cedula,' . $cliente->id,
             'nombres' => 'required|string|max:255',
@@ -67,7 +86,15 @@ class ClienteController extends Controller
             'email' => 'nullable|email|unique:clientes,email,' . $cliente->id,
         ]);
 
-        $cliente->update($request->all());
+        // Actualizar solo los campos permitidos
+        $cliente->update([
+            'cedula' => $request->cedula,
+            'nombres' => $request->nombres,
+            'apellidos' => $request->apellidos,
+            'direccion' => $request->direccion,
+            'telefono' => $request->telefono,
+            'email' => $request->email,
+        ]);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente actualizado con éxito.');
     }

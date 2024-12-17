@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('cedula', 10)->unique(); // Cédula ecuatoriana
             $table->string('nombres', 255);
             $table->string('apellidos', 255);
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->string('telefono', 15)->nullable(); // Campo opcional
             $table->string('email', 255)->nullable()->unique(); // Email único
             $table->timestamp('fecha_registro')->default(DB::raw('CURRENT_TIMESTAMP'));
+
             $table->timestamps();
         });
     }
