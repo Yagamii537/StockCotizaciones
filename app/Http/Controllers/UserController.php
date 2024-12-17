@@ -40,33 +40,35 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Usuario creado con éxito.');
     }
 
-    public function edit(User $usuario)
+    public function edit(User $user)
     {
-        $roles = Role::all();
-        return view('users.edit', compact('usuario', 'roles'));
+        $roles = Role::all(); // Obtener todos los roles
+        return view('users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, User $usuario)
+    public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $usuario->id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'role' => 'required|exists:roles,name',
         ]);
 
-        $usuario->update([
+        // Actualizar usuario
+        $user->update([
             'name' => $request->name,
             'email' => $request->email,
         ]);
 
-        $usuario->syncRoles([$request->role]);
+        // Actualizar roles
+        $user->syncRoles([$request->role]);
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado con éxito.');
     }
 
-    public function destroy(User $usuario)
+    public function destroy(User $user)
     {
-        $usuario->delete();
+        $user->delete();
         return redirect()->route('users.index')->with('success', 'Usuario eliminado con éxito.');
     }
 }

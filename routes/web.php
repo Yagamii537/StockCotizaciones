@@ -6,8 +6,8 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\UserController;
-
-
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 
 
 
@@ -27,6 +27,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::resource('users', UserController::class)->names('users');
+    Route::resource('roles', RoleController::class)->names('roles');
+    Route::resource('permissions', PermissionController::class)->names('permissions');
+
     Route::resource('inventarios', InventarioController::class)->names('inventarios')->except('show');
     Route::get('/inventarios/search', [InventarioController::class, 'search'])->name('inventarios.search');
     Route::get('/cotizaciones/{id}/pdf', [CotizacionController::class, 'generatePDF'])->name('cotizaciones.pdf');

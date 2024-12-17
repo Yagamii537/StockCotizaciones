@@ -342,12 +342,12 @@ return [
         [
             'text' => 'Roles',
             'icon' => 'fas fa-user-shield',
-            'url' => '#',
+            'route' => 'roles.index',
         ],
         [
             'text' => 'Permisos',
             'icon' => 'fas fa-key',
-            'url' => '#',
+            'route' => 'permissions.index',
         ],
     ],
 
