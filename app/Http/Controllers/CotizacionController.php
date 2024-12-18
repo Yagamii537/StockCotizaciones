@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\Cotizacion;
 use Illuminate\Http\Request;
 use App\Models\DetalleCotizacion;
+use Illuminate\Support\Carbon;
 
 
 
@@ -64,54 +65,64 @@ class CotizacionController extends Controller
         // Cargar las relaciones necesarias para la cotización
         $cotizacione->load('cliente', 'detalles.producto');
 
-        // Obtener los clientes y productos disponibles
-        $clientes = Cliente::all();
+        // Verificar que el usuario autenticado solo pueda editar su cotización
+        if ($cotizacione->user_id !== auth('web')->id()) {
+            return redirect()->route('cotizaciones.index')->with('error', 'No tienes permiso para editar esta cotización.');
+        }
+
+        // Pasar los productos y cotización a la vista
         $productos = Producto::all();
 
-        // Pasar los datos a la vista
-        return view('cotizaciones.edit', compact('cotizacione', 'clientes', 'productos'));
+        return view('cotizaciones.edit', compact('cotizacione', 'productos'));
     }
 
 
     public function update(Request $request, $id)
     {
-        // Validar los datos del formulario
+        // Validar los datos
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
-            'fecha' => 'required|date',
             'productos' => 'required|array',
+            'productos.*.id' => 'required|exists:productos,id',
             'productos.*.cantidad' => 'required|integer|min:1',
             'productos.*.precio' => 'required|numeric|min:0',
             'productos.*.subtotal' => 'required|numeric|min:0',
         ]);
 
+        // Obtener la fecha, si no viene del formulario usa la fecha actual
+        $fecha = $request->input('fecha') ?? Carbon::now()->toDateString();
+
         // Encontrar la cotización
         $cotizacion = Cotizacion::findOrFail($id);
 
-        // Actualizar datos de la cotización
+        // Actualizar los datos de la cotización
         $cotizacion->update([
             'cliente_id' => $request->cliente_id,
-            'fecha' => $request->fecha,
-            'total' => array_sum(array_column($request->productos, 'subtotal')),
+            'fecha' => $fecha,
+            'total' => collect($request->productos)->sum('subtotal'),
         ]);
 
         // Eliminar los detalles existentes
         $cotizacion->detalles()->delete();
 
         // Crear los nuevos detalles
-        foreach ($request->productos as $productoId => $producto) {
-            DetalleCotizacion::create([
-                'cotizacion_id' => $cotizacion->id,
-                'producto_id' => $productoId,
+        foreach ($request->productos as $producto) {
+            $cotizacion->detalles()->create([
+                'producto_id' => $producto['id'],
                 'cantidad' => $producto['cantidad'],
                 'precio_unitario' => $producto['precio'],
                 'subtotal' => $producto['subtotal'],
             ]);
         }
 
-        // Redirigir al índice con un mensaje de éxito
-        return redirect()->route('cotizaciones.index')->with('success', 'Cotización actualizada con éxito.');
+        return redirect()->route('cotizaciones.index')->with('success', 'Cotización actualizada correctamente.');
     }
+
+
+
+
+
+
 
 
     public function destroy(Cotizacion $cotizacione)
