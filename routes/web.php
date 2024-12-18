@@ -8,6 +8,7 @@ use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\DashboardController;
 
 
 
@@ -29,6 +30,7 @@ Route::middleware([
     Route::resource('users', UserController::class)->names('users');
     Route::resource('roles', RoleController::class)->names('roles');
     Route::resource('permissions', PermissionController::class)->names('permissions');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('inventarios', InventarioController::class)->names('inventarios')->except('show');
     Route::get('/inventarios/search', [InventarioController::class, 'search'])->name('inventarios.search');

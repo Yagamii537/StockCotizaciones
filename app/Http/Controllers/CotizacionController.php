@@ -31,23 +31,37 @@ class CotizacionController extends Controller
 
     public function store(Request $request)
     {
-        $a = auth('web')->id();
+        $userId = auth('web')->id();
 
-
+        // Validar los datos del formulario
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
             'fecha' => 'required|date',
             'productos' => 'required|array',
+            'productos.*.cantidad' => 'required|integer|min:1',
+            'productos.*.precio' => 'required|numeric|min:0',
+            'productos.*.subtotal' => 'required|numeric|min:0',
+            'observaciones' => 'nullable|string',
+            'descuento' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $cotizacion = Cotizacion::create([
+        // Calcular el total con descuento (si existe)
+        $total = array_sum(array_column($request->productos, 'subtotal'));
+        $descuento = $request->descuento ?? 0; // Si no hay descuento, se asigna 0
+        $totalConDescuento = $total - ($total * ($descuento / 100));
 
+        // Crear la cotización
+        $cotizacion = Cotizacion::create([
             'cliente_id' => $request->cliente_id,
             'fecha' => $request->fecha,
-            'total' => array_sum(array_column($request->productos, 'subtotal')),
-            'user_id' => $a, // Asociar usuario logueado
+            'total' => $totalConDescuento,
+            'user_id' => $userId, // Asociar al usuario logueado
+            'estado' => 1, // Estado inicial: Pendiente de aprobación
+            'observaciones' => $request->observaciones,
+            'descuento' => $descuento,
         ]);
 
+        // Crear los detalles de la cotización
         foreach ($request->productos as $producto_id => $producto) {
             $cotizacion->detalles()->create([
                 'producto_id' => $producto_id,
@@ -57,8 +71,10 @@ class CotizacionController extends Controller
             ]);
         }
 
+        // Redirigir al índice con un mensaje de éxito
         return redirect()->route('cotizaciones.index')->with('success', 'Cotización creada con éxito.');
     }
+
 
     public function edit(Cotizacion $cotizacione)
     {
@@ -87,6 +103,9 @@ class CotizacionController extends Controller
             'productos.*.cantidad' => 'required|integer|min:1',
             'productos.*.precio' => 'required|numeric|min:0',
             'productos.*.subtotal' => 'required|numeric|min:0',
+            'estado' => 'required|integer|between:1,5', // Estado: valores entre 1 y 5
+            'observaciones' => 'nullable|string|max:255',
+            'descuento' => 'nullable|numeric|min:0|max:100',
         ]);
 
         // Obtener la fecha, si no viene del formulario usa la fecha actual
@@ -95,11 +114,19 @@ class CotizacionController extends Controller
         // Encontrar la cotización
         $cotizacion = Cotizacion::findOrFail($id);
 
+        // Calcular el total con descuento si existe
+        $total = collect($request->productos)->sum('subtotal');
+        $descuento = $request->input('descuento', 0); // Valor por defecto 0
+        $totalConDescuento = $total - ($total * ($descuento / 100));
+
         // Actualizar los datos de la cotización
         $cotizacion->update([
             'cliente_id' => $request->cliente_id,
             'fecha' => $fecha,
-            'total' => collect($request->productos)->sum('subtotal'),
+            'total' => $totalConDescuento,
+            'estado' => $request->estado, // Actualizar el estado
+            'observaciones' => $request->observaciones,
+            'descuento' => $descuento,
         ]);
 
         // Eliminar los detalles existentes
@@ -117,11 +144,6 @@ class CotizacionController extends Controller
 
         return redirect()->route('cotizaciones.index')->with('success', 'Cotización actualizada correctamente.');
     }
-
-
-
-
-
 
 
 

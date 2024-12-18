@@ -78,11 +78,39 @@
 
             </tbody>
         </table>
+        <!-- Descuento -->
+        <div class="form-group">
+            <label for="descuento">Descuento (%)</label>
+            <input type="number" step="0.01" name="descuento" id="descuento" class="form-control"
+                placeholder="Ingrese el descuento opcional"
+                value="{{ old('descuento', $cotizacione->descuento ?? '') }}">
+        </div>
 
         <!-- Total -->
         <div class="form-group text-right">
             <h5><strong>Total:</strong> $<span id="total">{{ number_format($cotizacione->total, 2) }}</span></h5>
         </div>
+        <!-- Estado -->
+        <div class="form-group">
+            <label for="estado">Estado</label>
+            <select name="estado" id="estado" class="form-control" required>
+                <option value="1" {{ isset($cotizacione) && $cotizacione->estado == 1 ? 'selected' : '' }}>Pendiente de aprobación</option>
+                <option value="2" {{ isset($cotizacione) && $cotizacione->estado == 2 ? 'selected' : '' }}>Pendiente de pago</option>
+                <option value="3" {{ isset($cotizacione) && $cotizacione->estado == 3 ? 'selected' : '' }}>Diferido</option>
+                <option value="4" {{ isset($cotizacione) && $cotizacione->estado == 4 ? 'selected' : '' }}>Cobrado pendiente de entrega</option>
+                <option value="5" {{ isset($cotizacione) && $cotizacione->estado == 5 ? 'selected' : '' }}>Entregado y cobrado</option>
+            </select>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="form-group">
+            <label for="observaciones">Observaciones</label>
+            <textarea name="observaciones" id="observaciones" class="form-control" rows="3"
+                    placeholder="Escriba observaciones opcionales">{{ old('observaciones', $cotizacione->observaciones ?? '') }}</textarea>
+        </div>
+
+
+
 
         <div class="form-group">
             <button type="submit" class="btn btn-success">Actualizar Cotización</button>
@@ -93,6 +121,25 @@
 
 @section('js')
 <script>
+    // Escuchar cambios en el descuento
+document.getElementById('descuento').addEventListener('input', actualizarTotal);
+
+// Actualizar Total con descuento
+function actualizarTotal() {
+    let total = 0;
+
+    document.querySelectorAll('.subtotal').forEach(el => {
+        total += parseFloat(el.value) || 0;
+    });
+
+    const descuentoInput = document.getElementById('descuento');
+    const descuento = parseFloat(descuentoInput.value) || 0;
+
+    // Aplicar descuento (si existe)
+    const totalConDescuento = total - (total * descuento / 100);
+    document.getElementById('total').textContent = totalConDescuento.toFixed(2);
+}
+
     document.addEventListener('DOMContentLoaded', function () {
         // === Variables ===
         const clienteSearchInput = document.getElementById('cliente_search');

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->date('fecha'); // Fecha de la cotización
             $table->decimal('total', 10, 2)->default(0); // Total de la cotización
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->tinyInteger('estado')->default(1); // Estado numérico (1 a 5)
+            $table->text('observaciones')->nullable(); // Observaciones opcionales
+            $table->decimal('descuento', 10, 2)->nullable(); // Descuento opcional
             $table->timestamps();
         });
     }

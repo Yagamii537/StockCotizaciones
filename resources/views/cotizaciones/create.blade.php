@@ -62,10 +62,29 @@
             </tbody>
         </table>
 
+        <div class="form-group">
+            <label for="descuento">Descuento (%)</label>
+            <input type="number" step="0.01" name="descuento" id="descuento" class="form-control"
+                placeholder="Ingrese el descuento opcional"
+                value="{{ old('descuento', $cotizacione->descuento ?? '') }}">
+        </div>
+
         <!-- Total -->
         <div class="form-group text-right">
             <h5><strong>Total:</strong> $<span id="total">0.00</span></h5>
         </div>
+
+
+        <!-- Observaciones -->
+        <div class="form-group">
+            <label for="observaciones">Observaciones</label>
+            <textarea name="observaciones" id="observaciones" class="form-control" rows="3"
+                    placeholder="Escriba observaciones opcionales">{{ old('observaciones', $cotizacione->observaciones ?? '') }}</textarea>
+        </div>
+
+        <!-- Descuento -->
+
+
 
 
 
@@ -79,6 +98,25 @@
 
 @section('js')
 <script>
+    // Escuchar cambios en el descuento
+document.getElementById('descuento').addEventListener('input', actualizarTotal);
+
+// Actualizar Total con descuento
+function actualizarTotal() {
+    let total = 0;
+
+    document.querySelectorAll('.subtotal').forEach(el => {
+        total += parseFloat(el.value) || 0;
+    });
+
+    const descuentoInput = document.getElementById('descuento');
+    const descuento = parseFloat(descuentoInput.value) || 0;
+
+    // Aplicar descuento (si existe)
+    const totalConDescuento = total - (total * descuento / 100);
+    document.getElementById('total').textContent = totalConDescuento.toFixed(2);
+}
+
     document.addEventListener('DOMContentLoaded', function () {
         const clienteSearchInput = document.getElementById('cliente_search');
         const clienteSuggestions = document.getElementById('cliente_suggestions');

@@ -9,7 +9,15 @@ class Cotizacion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'cliente_id', 'fecha', 'total'];
+    protected $fillable = [
+        'user_id',
+        'cliente_id',
+        'fecha',
+        'total',
+        'estado',
+        'observaciones',
+        'descuento',
+    ];
 
     // Relación con cliente
     public function cliente()

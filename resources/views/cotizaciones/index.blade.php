@@ -16,16 +16,32 @@
                 <th>Cliente</th>
                 <th>Fecha</th>
                 <th>Total</th>
+                <th>Estado</th> <!-- Nueva columna -->
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
+            @php
+                // Mapeo de estados
+                $estados = [
+                    1 => 'Pendiente de aprobación',
+                    2 => 'Pendiente de pago',
+                    3 => 'Diferido',
+                    4 => 'Cobrado pendiente de entrega',
+                    5 => 'Entregado y cobrado',
+                ];
+            @endphp
             @foreach ($cotizaciones as $cotizacione)
                 <tr>
                     <td>{{ $cotizacione->id }}</td>
                     <td>{{ $cotizacione->cliente->nombres }} {{ $cotizacione->cliente->apellidos }}</td>
                     <td>{{ $cotizacione->fecha }}</td>
                     <td>${{ number_format($cotizacione->total, 2) }}</td>
+                    <td>
+                        <span class="badge badge-info">
+                            {{ $estados[$cotizacione->estado] ?? 'Desconocido' }}
+                        </span>
+                    </td>
                     <td>
                         <a href="{{ route('cotizaciones.edit', $cotizacione) }}" class="btn btn-sm btn-success">Editar</a>
                         <form action="{{ route('cotizaciones.destroy', $cotizacione) }}" method="POST" style="display: inline-block;">
