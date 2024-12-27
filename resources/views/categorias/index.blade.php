@@ -24,6 +24,7 @@
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
+                <th>Se Cobra Por</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -33,6 +34,7 @@
                     <td>{{ $categoria->id }}</td>
                     <td>{{ $categoria->nombre }}</td>
                     <td>{{ $categoria->descripcion }}</td>
+                    <td>{{ $categoria->seCobraPor }}</td>
                     <td>
                         <a href="{{ route('categorias.edit', $categoria) }}" class="btn btn-sm btn-success">
                             <i class="fas fa-edit"></i>

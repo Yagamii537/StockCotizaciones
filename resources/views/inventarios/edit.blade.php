@@ -42,6 +42,23 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <label for="coloresModelos">Colores y Modelos</label>
+            <input type="text" name="coloresModelos" id="coloresModelos" class="form-control" value="{{ $inventario->coloresModelos }}">
+        </div>
+
+        <div class="form-group">
+            <label for="medida">Medida</label>
+            <input type="text" name="medida" id="medida" class="form-control" value="{{ $inventario->medida }}">
+        </div>
+
+        <div class="form-group">
+            <label for="comisionUnidad">Comisión por Unidad</label>
+            <input type="number" step="0.01" name="comisionUnidad" id="comisionUnidad" class="form-control" value="{{ $inventario->comisionUnidad }}">
+        </div>
+
+
+
         <button type="submit" class="btn btn-success">Actualizar</button>
     </form>
 @stop

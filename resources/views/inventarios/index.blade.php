@@ -32,6 +32,9 @@
                 <th>Categoría</th>
                 <th>Precio</th>
                 <th>Stock</th>
+                <th>Colores/Modelos</th>
+                <th>Medida</th>
+                <th>Comisión por Unidad</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -43,6 +46,9 @@
                     <td>{{ $inventario->categoria->nombre ?? 'Sin categoría' }}</td>
                     <td>${{ $inventario->precio }}</td>
                     <td>{{ $inventario->stock }}</td>
+                    <td>{{ $inventario->coloresModelos ?? 'N/A' }}</td>
+                    <td>{{ $inventario->medida ?? 'N/A' }}</td>
+                    <td>${{ number_format($inventario->comisionUnidad, 2) }}</td>
                     <td>
 
                         <a href="{{ route('inventarios.edit', $inventario) }}" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>

@@ -14,6 +14,9 @@ class Producto extends Model
         'descripcion',
         'precio',
         'stock',
+        'coloresModelos',
+        'medida',
+        'comisionUnidad',
         'categoria_id',
     ];
 

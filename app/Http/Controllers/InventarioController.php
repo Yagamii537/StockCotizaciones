@@ -24,9 +24,13 @@ class InventarioController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
             'precio' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'categoria_id' => 'required|exists:categorias,id',
+            'coloresModelos' => 'nullable|string',
+            'medida' => 'nullable|string|max:50',
+            'comisionUnidad' => 'nullable|numeric|min:0',
         ]);
 
         Producto::create($request->all());
@@ -82,9 +86,13 @@ class InventarioController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
             'precio' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'categoria_id' => 'required|exists:categorias,id',
+            'coloresModelos' => 'nullable|string',
+            'medida' => 'nullable|string|max:50',
+            'comisionUnidad' => 'nullable|numeric|min:0',
         ]);
 
         $inventario->update($request->all());

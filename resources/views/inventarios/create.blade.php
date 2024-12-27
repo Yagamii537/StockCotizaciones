@@ -39,6 +39,21 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <label for="coloresModelos">Colores / Modelos</label>
+            <textarea name="coloresModelos" id="coloresModelos" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="medida">Medida</label>
+            <input type="text" name="medida" id="medida" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="comisionUnidad">Comisión por Unidad</label>
+            <input type="number" step="0.01" name="comisionUnidad" id="comisionUnidad" class="form-control">
+        </div>
+
         <button type="submit" class="btn btn-success">Guardar</button>
     </form>
 @stop

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->decimal('precio', 10, 2);
             $table->integer('stock');
+            $table->text('coloresModelos')->nullable();
+            $table->string('medida')->nullable();
+            $table->decimal('comisionUnidad', 10, 2)->nullable();
             $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
             $table->timestamps();
         });

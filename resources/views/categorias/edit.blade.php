@@ -23,6 +23,11 @@
             <label for="descripcion">Descripción</label>
             <textarea name="descripcion" id="descripcion" class="form-control">{{ $categoria->descripcion }}</textarea>
         </div>
+        <div class="form-group">
+            <label for="seCobraPor">¿Cómo se cobra por?</label>
+            <input type="text" name="seCobraPor" id="seCobraPor" class="form-control"
+                   value="{{ old('seCobraPor', $categoria->seCobraPor ?? '') }}" placeholder="Ejemplo: Por unidad, Por peso">
+        </div>
         <button type="submit" class="btn btn-success">Actualizar</button>
     </form>
 @stop

@@ -21,14 +21,16 @@ class CategoriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|unique:categorias|max:255',
-            'descripcion' => 'nullable',
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'seCobraPor' => 'nullable|string|max:255',
         ]);
 
         Categoria::create($request->all());
 
         return redirect()->route('categorias.index')->with('success', 'Categoría creada con éxito.');
     }
+
 
     public function edit(Categoria $categoria)
     {
@@ -38,14 +40,16 @@ class CategoriaController extends Controller
     public function update(Request $request, Categoria $categoria)
     {
         $request->validate([
-            'nombre' => 'required|unique:categorias,nombre,' . $categoria->id . '|max:255',
-            'descripcion' => 'nullable',
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'seCobraPor' => 'nullable|string|max:255',
         ]);
 
         $categoria->update($request->all());
 
         return redirect()->route('categorias.index')->with('success', 'Categoría actualizada con éxito.');
     }
+
 
     public function destroy(Categoria $categoria)
     {

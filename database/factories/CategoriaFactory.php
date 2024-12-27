@@ -15,6 +15,7 @@ class CategoriaFactory extends Factory
         return [
             'nombre' => $this->faker->unique()->word(), // Nombre aleatorio único
             'descripcion' => $this->faker->sentence(),  // Descripción aleatoria
+            'seCobraPor' => $this->faker->randomElement(['unidad', 'peso', 'hora']),  // Descripción aleatoria
         ];
     }
 }
