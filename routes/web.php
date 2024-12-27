@@ -26,9 +26,9 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::resource('users', UserController::class)->names('users');
-    Route::resource('roles', RoleController::class)->names('roles');
-    Route::resource('permissions', PermissionController::class)->names('permissions');
+    Route::resource('users', UserController::class)->middleware('can:users.index')->names('users');
+    Route::resource('roles', RoleController::class)->middleware('can:users.index')->names('roles');
+    Route::resource('permissions', PermissionController::class)->middleware('can:users.index')->names('permissions');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('inventarios', InventarioController::class)->names('inventarios')->except('show');

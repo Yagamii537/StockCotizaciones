@@ -299,12 +299,7 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
+
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
@@ -315,44 +310,52 @@ return [
             'text' => 'Inventario',
             'route' => 'inventarios.index',
             'icon' => 'fa fa-archive',
+            'can' => 'inventarios.index',
+
         ],
 
         [
             'text' => 'Categorias',
             'route' => 'categorias.index',
             'icon' => 'fas fa-tags',
+            'can' => 'categorias.index',
         ],
         [
             'text' => 'Clientes',
             'route' => 'clientes.index',
             'icon' => 'fas fa-users',
+            'can' => 'clientes.index',
         ],
         [
             'text' => 'Cotizaciones',
             'route' => 'cotizaciones.index',
             'icon' => 'fas fa-file-invoice',
+            'can' => 'cotizaciones.index',
         ],
         [
             'text' => 'Reportes',
             'route' => 'reportes.productos',
             'icon' => 'fas fa-chart-bar', // Icono de gráfica de barras
+            'can' => 'reportes.productos',
         ],
         ['header' => 'ADMINISTRACIÓN'],
         [
             'text' => 'Usuarios',
-
             'icon' => 'fas fa-user',
             'route' => 'users.index',
+            'can' => 'users.index',
         ],
         [
             'text' => 'Roles',
             'icon' => 'fas fa-user-shield',
             'route' => 'roles.index',
+            'can' => 'roles.index',
         ],
         [
             'text' => 'Permisos',
             'icon' => 'fas fa-key',
             'route' => 'permissions.index',
+            'can' => 'permissions.index',
         ],
     ],
 

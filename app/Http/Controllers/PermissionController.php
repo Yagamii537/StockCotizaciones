@@ -24,7 +24,11 @@ class PermissionController extends Controller
             'name' => 'required|string|unique:permissions,name',
         ]);
 
-        Permission::create(['name' => $request->name]);
+        // Crear el permiso con el guard_name como 'web'
+        Permission::create([
+            'name' => $request->name,
+            'guard_name' => 'web', // Asegurar que el guard_name sea 'web'
+        ]);
 
         return redirect()->route('permissions.index')->with('success', 'Permiso creado con éxito.');
     }
@@ -47,6 +51,7 @@ class PermissionController extends Controller
 
     public function destroy(Permission $permission)
     {
+
         $permission->delete();
         return redirect()->route('permissions.index')->with('success', 'Permiso eliminado con éxito.');
     }

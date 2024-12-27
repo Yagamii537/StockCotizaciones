@@ -17,28 +17,35 @@ class DatabaseSeeder extends Seeder
 
         // Crear usuarios
         User::create([
-            'name' => 'Mauricio Peñafiel',
-            'email' => 'admin@correo.com',
-            'password' => bcrypt('123456789'),
+            'name' => 'Sebastián Atapuma',
+            'email' => 'sebasatapuma@hotmail.com',
+            'password' => bcrypt('sebastianAtapuma'),
         ])->assignRole('admin');
 
         User::create([
-            'name' => 'Empleado 1',
-            'email' => 'empleado1@correo.com',
-            'password' => bcrypt('123456789'),
+            'name' => 'Steven Salinas',
+            'email' => 'steeven10@hotmail.com',
+            'password' => bcrypt('stevenSalinas'),
         ])->assignRole('empleado');
 
         User::create([
-            'name' => 'Empleado 2',
-            'email' => 'empleado2@correo.com',
-            'password' => bcrypt('123456789'),
+            'name' => 'Diego Atapuma',
+            'email' => 'pumasecuador2018@hotmail.com',
+            'password' => bcrypt('diegoAtapuma'),
+        ])->assignRole('empleado');
+
+        User::create([
+            'name' => 'Dilan Polanco',
+            'email' => 'dilanjav_8@hotmail.com',
+            'password' => bcrypt('dilanPolanco'),
         ])->assignRole('empleado');
 
         // Llamar otros seeders después de crear usuarios
+        /*
         $this->call([
             CategoriaSeeder::class,
             ProductoSeeder::class,
             ClienteSeeder::class, // ClienteSeeder depende de los usuarios
-        ]);
+        ]);*/
     }
 }
