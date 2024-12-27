@@ -7,7 +7,10 @@
 @stop
 
 @section('content')
-    <a href="{{ route('cotizaciones.create') }}" class="btn btn-primary mb-3">Nueva Cotización</a>
+    <div class="mb-3">
+        <a href="{{ route('cotizaciones.create') }}" class="btn btn-primary">Nueva Cotización</a>
+        <a href="{{ route('cotizaciones.entregado') }}" class="btn btn-secondary">Ver Cotizaciones Entregadas y Cobradas</a> <!-- Nuevo botón -->
+    </div>
 
     <table class="table table-striped">
         <thead>

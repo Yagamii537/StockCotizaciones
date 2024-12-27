@@ -17,8 +17,19 @@ class CotizacionController extends Controller
 {
     public function index()
     {
-        $cotizaciones = Cotizacion::where('user_id', auth('web')->id())->get();
+        $cotizaciones = Cotizacion::where('user_id', auth('web')->id())
+            ->whereBetween('estado', [1, 4]) // Filtrar estados entre 1 y 4
+            ->get();
         return view('cotizaciones.index', compact('cotizaciones'));
+    }
+
+    public function entregado()
+    {
+        $cotizaciones = Cotizacion::where('user_id', auth('web')->id())
+            ->where('estado', 5) // Solo estado 5
+            ->get();
+
+        return view('cotizaciones.entregado', compact('cotizaciones'));
     }
 
 
@@ -119,6 +130,9 @@ class CotizacionController extends Controller
         $descuento = $request->input('descuento', 0); // Valor por defecto 0
         $totalConDescuento = $total - ($total * ($descuento / 100));
 
+        // Verificar si el estado cambió a "Entregado y Cobrado"
+        $estadoAnterior = $cotizacion->estado;
+
         // Actualizar los datos de la cotización
         $cotizacion->update([
             'cliente_id' => $request->cliente_id,
@@ -140,6 +154,14 @@ class CotizacionController extends Controller
                 'precio_unitario' => $producto['precio'],
                 'subtotal' => $producto['subtotal'],
             ]);
+        }
+
+        // Si el estado cambió a "Entregado y Cobrado", actualizar el stock de los productos
+        if ($estadoAnterior !== 5 && $request->estado == 5) {
+            foreach ($request->productos as $producto) {
+                $productoModel = Producto::findOrFail($producto['id']);
+                $productoModel->decrement('stock', $producto['cantidad']);
+            }
         }
 
         return redirect()->route('cotizaciones.index')->with('success', 'Cotización actualizada correctamente.');

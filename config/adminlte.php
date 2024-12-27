@@ -332,6 +332,11 @@ return [
             'route' => 'cotizaciones.index',
             'icon' => 'fas fa-file-invoice',
         ],
+        [
+            'text' => 'Reportes',
+            'route' => 'reportes.productos',
+            'icon' => 'fas fa-chart-bar', // Icono de gráfica de barras
+        ],
         ['header' => 'ADMINISTRACIÓN'],
         [
             'text' => 'Usuarios',

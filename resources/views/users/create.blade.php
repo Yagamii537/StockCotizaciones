@@ -28,6 +28,7 @@
         <div class="form-group">
             <label for="role">Rol</label>
             <select name="role" id="role" class="form-control" required>
+                <option value="">Seleccione un rol</option>
                 @foreach ($roles as $role)
                     <option value="{{ $role->name }}">{{ $role->name }}</option>
                 @endforeach
